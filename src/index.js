@@ -93,11 +93,12 @@ function returnArgumentsArray() {
 
    console.log(newSum()) выведет 6
  */
-function bindFunction(fn, ...args) {
-    // set null for 'this' argument   
-    args.unshift(null);
-    
-    return fn.bind(...args);
+function bindFunction(fn, ...args) {   
+
+    return function () {
+
+        return fn.apply(null, args);
+    };
 }
 
 export {
