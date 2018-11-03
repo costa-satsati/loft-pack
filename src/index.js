@@ -36,13 +36,15 @@ function map(array, fn) {
  Посмотрите как работает reduce и повторите это поведение для массива, который будет передан в параметре array
  */
 function reduce(array, fn, initial) {
-    let accumulator = initial ? [initial] : 0;
+    let result = initial ? initial : array[0];
+    // if initial passed start from element 0
+    let initIndex = initial ? 0 : 1;
 
-    for (let i = 0; i < array.length; i++) {
-        accumulator.push(fn(i, array[i], i, array));
+    for (let i = initIndex; i < array.length; i++) {
+        result = fn(result, array[i], i, array);
     }
 
-    return accumulator;
+    return result;
 
 }
 
@@ -73,6 +75,33 @@ function upperProps(obj) {
  Посмотрите как работает slice и повторите это поведение для массива, который будет передан в параметре array
  */
 function slice(array, from, to) {
+    let result = []; 
+    let len = array.length;
+
+    // calculate start index
+    let start = from || 0;
+    
+    if (start < 0) {
+        start = len + start;
+    }
+    start = start < 0 ? 0 : start;  
+    
+    // calculate end index
+    let end = (to !== undefined ) ? to : len;
+
+    end = end <= len ? end : len;
+    if (end < 0) {
+        end = len + end;
+    }
+
+    // generate sliced array
+    if (end - start > 0) {
+        for (let i = start; i < end; i++) {
+            result.push(array[i]);
+        }
+    }
+
+    return result;
 }
 
 /*
@@ -82,6 +111,14 @@ function slice(array, from, to) {
  Proxy должен перехватывать все попытки записи значений свойств и возводить это значение в квадрат
  */
 function createProxy(obj) {
+    return new Proxy(obj, {
+        set: function (target, prop, value) {
+            target[prop] = Math.pow(value, 2);
+
+            return true;
+        }
+    });
+    
 }
 
 export {
