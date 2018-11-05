@@ -59,6 +59,10 @@ function isAllTrue(array, fn) {
 function isSomeTrue(array, fn) {
     let result = false;
 
+    if (!(array instanceof Array)) {
+        throw new Error('empty array');
+    }
+
     if (typeof fn !== 'function') {
         throw new Error('fn is not a function');
     }
@@ -66,11 +70,7 @@ function isSomeTrue(array, fn) {
     if (array.length === 0 ) {
         throw new Error('empty array');
     }
-
-    if (!(array instanceof Array)) {
-        throw new Error('empty array');
-    }
-
+   
     for (let i = 0; i < array.length; i++) {
         if (fn(array[i])) { 
             return true; 
@@ -94,9 +94,18 @@ function isSomeTrue(array, fn) {
  */
 function returnBadArguments(fn, ...args) {
     let result = [];
-    
+
     if (typeof fn !== 'function') {
         throw new Error('fn is not a function');
+    }
+
+    for (let i = 0; i < args.length; i++) {
+        try {
+            fn(args[i]);
+        } catch (e) { 
+            result.push(args[i]);
+        }
+                
     }
 
     return result;
@@ -119,7 +128,19 @@ function returnBadArguments(fn, ...args) {
    - number не является числом (с текстом "number is not a number")
    - какой-либо из аргументов div является нулем (с текстом "division by 0")
  */
-function calculator() {
+function calculator(number = 0) {
+    let result = {
+        sum: function () { },
+        dif: function () { },
+        div: function () { },
+        mul: function () { },
+    };
+
+    if (typeof number !== 'number') {
+        throw new Error('number is not a number');
+    }
+
+    return result;
 }
 
 /* При решении задач, пострайтесь использовать отладчик */
