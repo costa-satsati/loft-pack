@@ -130,15 +130,51 @@ function returnBadArguments(fn, ...args) {
  */
 function calculator(number = 0) {
     let result = {
-        sum: function () { },
-        dif: function () { },
-        div: function () { },
-        mul: function () { },
+        sum: function () {
+            for (let i = 0; i < arguments.length; i++) {
+
+                this.num += arguments[i];
+            }
+
+            return this.num;
+        },
+        dif: function () {
+            for (let i = 0; i < arguments.length; i++) {
+
+                this.num -= arguments[i];
+            }
+
+            return this.num;
+        },
+        div: function () { 
+            let args = [...arguments];
+
+            // throw an error if any arg is equal to 0    
+            if (args.includes(0)) {                  
+                throw new Error('division by 0');
+            }
+            
+            for (let i = 0; i < args.length; i++) {                         
+                this.num /= args[i];
+            }
+
+            return this.num;
+        },
+        mul: function () {
+            for (let i = 0; i < arguments.length; i++) {
+
+                this.num *= arguments[i];
+            }
+
+            return this.num;
+        },
     };
 
     if (typeof number !== 'number') {
         throw new Error('number is not a number');
     }
+
+    result.num = number;
 
     return result;
 }
