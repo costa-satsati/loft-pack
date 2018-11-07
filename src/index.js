@@ -23,11 +23,7 @@ function isAllTrue(array, fn) {
         throw new Error('fn is not a function');
     }
 
-    if (array.length === 0 ) {
-        throw new Error('empty array');
-    }
-
-    if (!(array instanceof Array)) {
+    if (array.length === 0 || !(array instanceof Array)) {
         throw new Error('empty array');
     }
 
