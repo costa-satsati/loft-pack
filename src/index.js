@@ -121,6 +121,18 @@ function deleteTextNodes(where) {
    должно быть преобразовано в <span><div><b></b></div><p></p></span>
  */
 function deleteTextNodesRecursive(where) {
+  
+    for (let child of where.childNodes) {  
+      console.log(child.nodeType);
+        if (child.hasChildNodes()) {
+            console.log(child.childNodes);
+            deleteTextNodesRecursive(child); 
+        } 
+        if (child.nodeType === 3) {          
+            child.remove();
+        } 
+        
+    }
 }
 
 /*
