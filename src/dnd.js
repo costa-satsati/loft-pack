@@ -63,6 +63,7 @@ function addListeners(target) {
     target.addEventListener('dragenter', handleDragEnter, false);
     target.addEventListener('dragover', handleDragOver, false);
     target.addEventListener('dragleave', handleDragLeave, false);
+    target.addEventListener('drop', handleDrop, false);
 }
 
 function handleDragStart(e) {
@@ -86,6 +87,21 @@ function handleDragEnter(e) {
 
 function handleDragLeave(e) {
     this.classList.remove('over'); // this / e.target is previous target element.
+}
+
+function handleDrop(e) {
+    // this / e.target is current target element.
+
+    if (e.stopPropagation) {
+        e.stopPropagation(); // stops the browser from redirecting.
+    }
+    
+    e.srcElement.style.left = e.clientX + 'px';
+    e.srcElement.style.top = e.clientY + 'px';
+
+    // See the section on the DataTransfer object.
+
+    return false;
 }
 
 let addDivButton = homeworkContainer.querySelector('#addDiv');
