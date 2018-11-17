@@ -43,6 +43,9 @@ function createDiv() {
     element.style.height = `${randomNumber(400)}px`;
     element.style.top = `${randomNumber(window.innerWidth)}px`;
     element.style.left = `${randomNumber(window.innerHeight)}px`;
+    element.style.position = 'absolute';
+    element.draggable = true;
+    element.cursor = 'move';
 
     return element;
 }
@@ -56,6 +59,33 @@ function createDiv() {
    addListeners(newDiv);
  */
 function addListeners(target) {
+    target.addEventListener('dragstart', handleDragStart, false);
+    target.addEventListener('dragenter', handleDragEnter, false);
+    target.addEventListener('dragover', handleDragOver, false);
+    target.addEventListener('dragleave', handleDragLeave, false);
+}
+
+function handleDragStart(e) {
+    this.style.opacity = '0.4';
+}
+
+function handleDragOver(e) {
+    if (e.preventDefault) {
+        e.preventDefault(); // Necessary. Allows us to drop.
+    }
+
+    e.dataTransfer.dropEffect = 'move'; // See the section on the DataTransfer object.
+
+    return false;
+}
+
+function handleDragEnter(e) {
+    // this / e.target is the current hover target.
+    this.classList.add('over');
+}
+
+function handleDragLeave(e) {
+    this.classList.remove('over'); // this / e.target is previous target element.
 }
 
 let addDivButton = homeworkContainer.querySelector('#addDiv');
