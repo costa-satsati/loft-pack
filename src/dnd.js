@@ -59,15 +59,15 @@ function createDiv() {
    addListeners(newDiv);
  */
 function addListeners(target) {
-    target.addEventListener('dragstart', handleDragStart, false);
-    target.addEventListener('dragenter', handleDragEnter, false);
+    target.addEventListener('dragstart', handleDragStart, false);  
     target.addEventListener('dragover', handleDragOver, false);
-    target.addEventListener('dragleave', handleDragLeave, false);
     target.addEventListener('drop', handleDrop, false);
 }
 
 function handleDragStart(e) {
-    this.style.opacity = '0.4';
+    e.target.style.opacity = '0.4';
+    e.target.classList.add('dragged');
+    
 }
 
 function handleDragOver(e) {
@@ -80,24 +80,16 @@ function handleDragOver(e) {
     return false;
 }
 
-function handleDragEnter(e) {
-    // this / e.target is the current hover target.
-    this.classList.add('over');
-}
-
-function handleDragLeave(e) {
-    this.classList.remove('over'); // this / e.target is previous target element.
-}
-
 function handleDrop(e) {
     // this / e.target is current target element.
+  
+    const srcDiv = document.querySelector('.dragged');
 
-    if (e.stopPropagation) {
-        e.stopPropagation(); // stops the browser from redirecting.
-    }
-    
-    e.srcElement.style.left = e.clientX + 'px';
-    e.srcElement.style.top = e.clientY + 'px';
+    srcDiv.style.opacity = '1.0';  
+    srcDiv.style.left = e.clientX + 'px';
+    srcDiv.style.top = e.clientY + 'px';
+
+    srcDiv.classList.remove('dragged');
 
     // See the section on the DataTransfer object.
 
