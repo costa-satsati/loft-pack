@@ -43,6 +43,7 @@ const addButton = homeworkContainer.querySelector('#add-button');
 // таблица со списком cookie
 const listTable = homeworkContainer.querySelector('#list-table tbody');
 
+// build cookie table
 if (document.cookie) {
     const cookies = document.cookie.split('; ').reduce((prev, cur) => {
         const [name, value] = cur.split('=');
@@ -54,22 +55,7 @@ if (document.cookie) {
    
     for (const cookieName in cookies) {
         if (cookies.hasOwnProperty(cookieName)) {
-            // create row and cells        
-            const cookieRow = listTable.insertRow();
-            const nameCell = cookieRow.insertCell();
-            const valueCell = cookieRow.insertCell();
-            const removeCell = cookieRow.insertCell();
-            const btnRemove = document.createElement('BUTTON');
-
-            btnRemove.innerText = 'Delete';
-            btnRemove.addEventListener('click', function() {
-                deleteCookie(cookieName);
-            });
-            // set cell content
-            removeCell.appendChild(btnRemove);     
-            nameCell.innerText = cookieName;
-            valueCell.innerText = cookies[cookieName];
-                       
+            addCookie(cookieName, cookies[cookieName])                                
         }       
     }
 }
@@ -82,6 +68,26 @@ function deleteCookie(name) {
     document.cookie = `${name}=''; expires=${d.toGMTString()}`;
 }
 
+function addCookie(cookieName, cookieVal) {
+    // create row and cells        
+    const cookieRow = listTable.insertRow();
+    const nameCell = cookieRow.insertCell();
+    const valueCell = cookieRow.insertCell();
+    const removeCell = cookieRow.insertCell();
+    const btnRemove = document.createElement('BUTTON');
+
+    btnRemove.innerText = 'Delete';
+    btnRemove.addEventListener('click', function() {
+        deleteCookie(cookieName);
+        // remove row
+        this.closest('tr').remove();
+    });
+    // set cell content
+    removeCell.appendChild(btnRemove);     
+    nameCell.innerText = cookieName;
+    valueCell.innerText = cookieVal;
+}
+
 filterNameInput.addEventListener('keyup', function() {
     // здесь можно обработать нажатия на клавиши внутри текстового поля для фильтрации cookie
 });
@@ -89,5 +95,5 @@ filterNameInput.addEventListener('keyup', function() {
 addButton.addEventListener('click', () => {
     // здесь можно обработать нажатие на кнопку "добавить cookie"
     document.cookie = `${addNameInput.value}=${addValueInput.value}`;
-
+    addCookie(addNameInput.value, addValueInput.value);
 });
