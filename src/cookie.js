@@ -44,19 +44,25 @@ const addButton = homeworkContainer.querySelector('#add-button');
 const listTable = homeworkContainer.querySelector('#list-table tbody');
 
 // build cookie table
-if (document.cookie) {
-    const cookies = document.cookie.split('; ').reduce((prev, cur) => {
-        const [name, value] = cur.split('=');
+function buildCookieTable() {
+    // clear table contents
+    listTable.innerHTML = '';
+    if (document.cookie) {
+        const cookies = document.cookie.split('; ').reduce((prev, cur) => {
+            const [name, value] = cur.split('=');
 
-        prev[name] = value;
+            prev[name] = value;
 
-        return prev;
-    }, {});
-   
-    for (const cookieName in cookies) {
-        if (cookies.hasOwnProperty(cookieName)) {
-            addCookie(cookieName, cookies[cookieName])                                
-        }       
+            return prev;
+        }, {});
+        const fiter = filterNameInput.value;
+
+        for (const cookieName in cookies) {
+            if (cookies.hasOwnProperty(cookieName) &&
+                (cookieName.includes(fiter) || cookies[cookieName].includes(fiter))) {
+                addCookieRow(cookieName, cookies[cookieName]);
+            }
+        }
     }
 }
 
@@ -68,7 +74,7 @@ function deleteCookie(name) {
     document.cookie = `${name}=''; expires=${d.toGMTString()}`;
 }
 
-function addCookie(cookieName, cookieVal) {
+function addCookieRow(cookieName, cookieVal) {
     // create row and cells        
     const cookieRow = listTable.insertRow();
     const nameCell = cookieRow.insertCell();
@@ -79,8 +85,8 @@ function addCookie(cookieName, cookieVal) {
     btnRemove.innerText = 'Delete';
     btnRemove.addEventListener('click', function() {
         deleteCookie(cookieName);
-        // remove row
-        this.closest('tr').remove();
+        // refresh table
+        buildCookieTable();
     });
     // set cell content
     removeCell.appendChild(btnRemove);     
@@ -90,10 +96,12 @@ function addCookie(cookieName, cookieVal) {
 
 filterNameInput.addEventListener('keyup', function() {
     // здесь можно обработать нажатия на клавиши внутри текстового поля для фильтрации cookie
+    buildCookieTable();
 });
 
 addButton.addEventListener('click', () => {
     // здесь можно обработать нажатие на кнопку "добавить cookie"
     document.cookie = `${addNameInput.value}=${addValueInput.value}`;
-    addCookie(addNameInput.value, addValueInput.value);
+    // refresh table
+    buildCookieTable();
 });
